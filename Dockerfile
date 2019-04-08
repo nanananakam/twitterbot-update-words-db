@@ -34,5 +34,6 @@ RUN apt update && apt -y install mecab libmecab-dev mecab-ipadic-utf8 python3-pi
  && pip3 install awscli \
  && echo "dicdir = /mecab-ipadic-neologd-dic" > `mecab-config --sysconfdir`/mecabrc \
  && chmod a+x /run.sh
+ && date > /build_date.txt
 
 ENTRYPOINT /run.sh
