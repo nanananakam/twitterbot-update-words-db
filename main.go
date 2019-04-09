@@ -10,13 +10,12 @@ import (
 type Tweet struct {
 	gorm.Model
 	TwitterID string `gorm:"unique_index"`
-	Tweet     string `gorm:"type:varchar(1024)"`
+	Tweet     string `gorm:"type:varchar(512)"`
 }
 
 type Words struct {
-	gorm.Model
-	Word1 string `gorm:"index;type:varchar(1024)"`
-	Word2 string `gorm:"type:varchar(1024)"`
+	Word1 string `gorm:"index;type:varchar(512)"`
+	Word2 string `gorm:"type:varchar(512)"`
 }
 
 func main() {
