@@ -34,6 +34,6 @@ COPY --from=neologd-builder /mecab-ipadic-neologd-dic /mecab-ipadic-neologd-dic
 
 RUN apt update && apt -y install mecab libmecab-dev mecab-ipadic-utf8 \
  && apt clean && rm -rf /var/lib/apt/lists/* \
- && echo "dicdir = /mecab-ipadic-neologd-dic" > `mecab-config --sysconfdir`/mecabrc \
+ && echo "dicdir = /mecab-ipadic-neologd-dic" > `mecab-config --sysconfdir`/mecabrc
 
 ENTRYPOINT /main
