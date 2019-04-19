@@ -38,7 +38,7 @@ func main() {
 	}
 	defer s3file.Body.Close()
 
-	file, err := os.Create("/tmp/tweets.tar.xz")
+	file, err := os.Create("tweets.tar.xz")
 	if err != nil {
 		panic(err)
 	}
