@@ -24,4 +24,5 @@ RUN apt-get update && apt-get -y install mecab libmecab-dev mecab-ipadic-utf8 ca
  && go build -o /main /main.go \
  && echo "dicdir = /mecab-ipadic-neologd-dic" > `mecab-config --sysconfdir`/mecabrc
 
+WORKDIR /
 ENTRYPOINT /main
