@@ -32,7 +32,7 @@ COPY . /
 COPY --from=golang-builder /main /
 COPY --from=neologd-builder /mecab-ipadic-neologd-dic /mecab-ipadic-neologd-dic
 
-RUN apt update && apt -y install mecab libmecab-dev mecab-ipadic-utf8 \
+RUN apt update && apt -y install mecab libmecab-dev mecab-ipadic-utf8 ca-certificates \
  && apt clean && rm -rf /var/lib/apt/lists/* \
  && echo "dicdir = /mecab-ipadic-neologd-dic" > `mecab-config --sysconfdir`/mecabrc
 
