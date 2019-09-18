@@ -3,7 +3,7 @@ FROM debian:9-slim as neologd-builder
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
-RUN apt-get update &&  apt -y install mecab libmecab-dev mecab-ipadic-utf8 git make curl file \
+RUN apt-get update &&  apt -y install mecab libmecab-dev mecab-ipadic-utf8 git make curl xz-utils file \
  && git clone --depth 1 https://github.com/neologd/mecab-ipadic-neologd.git \
  && cd mecab-ipadic-neologd \
  && ./bin/install-mecab-ipadic-neologd -n -a -y -u \
@@ -25,4 +25,4 @@ RUN apt-get update && apt-get -y install mecab libmecab-dev mecab-ipadic-utf8 ca
  && echo "dicdir = /mecab-ipadic-neologd-dic" > `mecab-config --sysconfdir`/mecabrc
 
 WORKDIR /
-CMD ["sh", "-c", "/main ; tail -f /dev/null"]
+ENTRYPOINT /main
