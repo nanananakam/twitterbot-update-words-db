@@ -99,8 +99,8 @@ func main() {
 				fmt.Errorf("ParseNode failed.\n")
 				panic(err)
 			}
-			var word1 string
-			var word2 string
+			word1 := ""
+			word2 := ""
 			for ; node != (mecab.Node{}); node = node.Next() {
 				if node.Surface() != "" {
 					word2 = node.Surface()
