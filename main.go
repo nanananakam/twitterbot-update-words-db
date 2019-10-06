@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -84,6 +85,7 @@ func main() {
 
 		if !ngRep.MatchString(tweet.Tweet) {
 			tweetString := filterRep.ReplaceAllString(tweet.Tweet, "")
+			fmt.Println(tweetString)
 
 			node, err := tagger.ParseToNode(tweetString)
 			if err != nil {
@@ -99,6 +101,7 @@ func main() {
 						Word2: word2,
 					}
 					tx2.Create(&words)
+					fmt.Println(word1, word2)
 					word1 = word2
 				}
 			}
