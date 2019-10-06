@@ -35,32 +35,39 @@ func main() {
 		Key:    aws.String("/tweets.tar.xz"),
 	})
 	if err != nil {
+		fmt.Errorf("S3 Get Object failed.\n")
 		panic(err)
 	}
 	defer s3file.Body.Close()
 
 	file, err := os.Create("tweets.tar.xz")
 	if err != nil {
+		fmt.Errorf("File Create failed.\n")
 		panic(err)
 	}
 	defer file.Close()
 
 	if _, err := io.Copy(file, s3file.Body); err != nil {
+		fmt.Errorf("File Write Failed.\n")
 		panic(err)
 	}
 
-	if err := exec.Command("sh", "-c", "tar Jxvf tweets.tar.xz").Run(); err != nil {
+	if output, err := exec.Command("sh", "-c", "tar Jxvf tweets.tar.xz").CombinedOutput(); err != nil {
+		fmt.Errorf(string(output))
+		fmt.Errorf("File Deflate failed.\n")
 		panic(err)
 	}
 
 	db, err := gorm.Open("sqlite3", "tweets.db")
 	if err != nil {
+		fmt.Errorf("Tweets db open failed.\n")
 		panic(err)
 	}
 	defer db.Close()
 
 	db2, err := gorm.Open("sqlite3", "words.db")
 	if err != nil {
+		fmt.Errorf("Words db open failed.\n")
 		panic(err)
 	}
 	defer db2.Close()
@@ -68,6 +75,7 @@ func main() {
 
 	tagger, err := mecab.New(map[string]string{"output-format-type": "wakati"})
 	if err != nil {
+		fmt.Errorf("Mecab tagger create failed.\n")
 		panic(err)
 	}
 	defer tagger.Destroy()
@@ -89,10 +97,11 @@ func main() {
 
 			node, err := tagger.ParseToNode(tweetString)
 			if err != nil {
+				fmt.Errorf("ParseNode failed.\n")
 				panic(err)
 			}
-			var word1 string
-			var word2 string
+			word1 := ""
+			word2 := ""
 			for ; node != (mecab.Node{}); node = node.Next() {
 				if node.Surface() != "" {
 					word2 = node.Surface()
@@ -118,12 +127,15 @@ func main() {
 
 	tx2.Commit()
 
-	if err := exec.Command("sh", "-c", "tar Jcvf words.tar.xz words.db").Run(); err != nil {
+	if output, err := exec.Command("sh", "-c", "tar Jcvf words.tar.xz words.db").CombinedOutput(); err != nil {
+		fmt.Errorf(string(output))
+		fmt.Errorf("Words tar failed.\n")
 		panic(err)
 	}
 
 	file2, err := os.Open("words.tar.xz")
 	if err != nil {
+		fmt.Errorf("Words tar open failed.\n")
 		panic(err)
 	}
 
@@ -132,6 +144,7 @@ func main() {
 		Key:    aws.String("/words.tar.xz"),
 		Body:   file2,
 	}); err != nil {
+		fmt.Errorf("Words tar upload failed.\n")
 		panic(err)
 	}
 
