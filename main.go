@@ -35,7 +35,7 @@ func main() {
 	_, err := svc.CopyObject(&s3.CopyObjectInput{
 		Bucket:     aws.String(os.Getenv("AWS_S3_BUCKET")),
 		CopySource: aws.String(os.Getenv("AWS_S3_BUCKET") + "/tweets.tar.xz"),
-		Key:        aws.String("backup/tweets" + fmt.Sprint(time.Now().Format("2011-01-31")) + "tar.xz"),
+		Key:        aws.String("backup/tweets" + fmt.Sprint(time.Now().Format("2011-01-31")) + ".tar.xz"),
 	})
 	if err != nil {
 		fmt.Errorf("s3 backup copy failed")
