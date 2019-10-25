@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"time"
 )
 
 type Tweet struct {
@@ -29,6 +30,17 @@ func main() {
 	svc := s3.New(session.New(), &aws.Config{
 		Region: aws.String(os.Getenv("AWS_DEFAULT_REGION")),
 	})
+
+	//backup
+	_, err := svc.CopyObject(&s3.CopyObjectInput{
+		Bucket:     aws.String(os.Getenv("AWS_S3_BUCKET")),
+		CopySource: aws.String(os.Getenv("AWS_S3_BUCKET") + "/tweets.tar.xz"),
+		Key:        aws.String("backup/tweets" + fmt.Sprint(time.Now().Format("2011-01-31")) + "tar.xz"),
+	})
+	if err != nil {
+		fmt.Errorf("s3 backup copy failed")
+		panic(err)
+	}
 
 	s3file, err := svc.GetObject(&s3.GetObjectInput{
 		Bucket: aws.String(os.Getenv("AWS_S3_BUCKET")),
